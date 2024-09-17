@@ -14,7 +14,7 @@ export default function Home() {
           priority
           className="mx-auto"
         />
-        <h1> Welcome to the Cocktail Party </h1>
+        <h1 className="text-center"> The Cocktail Party </h1>
       </div>
 
       <div className="form-content">

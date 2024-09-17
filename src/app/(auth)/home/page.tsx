@@ -45,7 +45,7 @@ function HomePage() {
           priority
           className="mx-auto"
         />
-        <h1 className="text-center">Welcome to your Cocktail Party</h1>
+        <h1 className="text-center">Welcome to The Cocktail Party</h1>
       </div>
 
       <div className="buttons p-2 w-1/2 flex flex-col justify-center items-center space-y-6 ">
