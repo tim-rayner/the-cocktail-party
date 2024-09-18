@@ -57,43 +57,51 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   //CREAE user in mongodb
-  if (eventType === "user.created") {
-    const { id, email_addresses, image_url, first_name, last_name, username } =
-      evt.data;
 
-    const clerkUser = {
-      clerkId: id,
-      email: email_addresses[0].email_address,
-      username: username,
-      firstName: first_name,
-      lastName: last_name,
-      avatar: image_url,
-    };
+  try {
+    if (eventType === "user.created") {
+      const { id, email_addresses } = evt.data;
 
-    console.log("Creating user in MongoDB:", clerkUser);
+      const clerkUser = {
+        clerkId: id,
+        email: email_addresses[0].email_address,
+        //   username: username,
+        //   firstName: first_name,
+        //   lastName: last_name,
+        //   avatar: image_url,
+      };
 
-    const user = {
-      clerkId: clerkUser.clerkId,
-      email: clerkUser.email,
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-      username: clerkUser.username,
-      avatar: clerkUser.avatar,
-    };
-    // Create the user in MongoDB using the createUser serverless function
-    const newUser = await createUser(user);
+      console.log("Creating user in MongoDB:", clerkUser);
 
-    if (newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
-        publicMetadata: {
-          userId: newUser._id,
-        },
+      const user = {
+        clerkId: clerkUser.clerkId,
+        email: clerkUser.email,
+        //   firstName: clerkUser.firstName,
+        //   lastName: clerkUser.lastName,
+        //   username: clerkUser.username,
+        //   avatar: clerkUser.avatar,
+      };
+      // Create the user in MongoDB using the createUser serverless function
+      const newUser = await createUser(user);
+
+      if (newUser) {
+        await clerkClient.users.updateUserMetadata(id, {
+          publicMetadata: {
+            userId: newUser._id,
+          },
+        });
+      }
+
+      return NextResponse.json({
+        message: "New user created successfully",
+        user: newUser,
       });
     }
-
-    return NextResponse.json({
-      message: "New user created successfully",
-      user: newUser,
+  } catch (err) {
+    console.error("Error saving user:", err);
+    return new Response(JSON.stringify({ message: (err as Error).message }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
     });
   }
 
