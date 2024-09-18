@@ -9,6 +9,10 @@ export async function createUser(user: any) {
     return JSON.parse(JSON.stringify(newUser));
   } catch (err) {
     console.error("Error saving user:", err);
-    throw new Error(err.message);
+    if (err instanceof Error) {
+      throw new Error(err.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
   }
 }
