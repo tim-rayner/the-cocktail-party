@@ -86,28 +86,28 @@ export async function POST(req: Request) {
 
       const existingUser = await User.findOne({ email: user.email });
 
-      if (existingUser) {
+      if (existingUser || user.username === null) {
         return NextResponse.json({
           message: "User already exists",
           user: existingUser,
         });
-      }
+      } else {
+        // Create the user in MongoDB using the createUser serverless function
+        const newUser = await createUser(user);
 
-      // Create the user in MongoDB using the createUser serverless function
-      const newUser = await createUser(user);
+        if (newUser) {
+          await clerkClient.users.updateUserMetadata(id, {
+            publicMetadata: {
+              userId: newUser._id,
+            },
+          });
+        }
 
-      if (newUser) {
-        await clerkClient.users.updateUserMetadata(id, {
-          publicMetadata: {
-            userId: newUser._id,
-          },
+        return NextResponse.json({
+          message: "New user created successfully",
+          user: newUser,
         });
       }
-
-      return NextResponse.json({
-        message: "New user created successfully",
-        user: newUser,
-      });
     }
   } catch (err) {
     console.error("Error saving user:", err);

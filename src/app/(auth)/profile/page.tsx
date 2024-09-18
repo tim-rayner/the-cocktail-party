@@ -1,6 +1,5 @@
 "use client";
 
-import { createUser } from "@/app/lib/actions/user.action";
 import BrandButton from "@/components/atoms/BrandButton";
 import { useAuth } from "@clerk/nextjs";
 
