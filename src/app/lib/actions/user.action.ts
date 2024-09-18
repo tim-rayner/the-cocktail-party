@@ -1,9 +1,11 @@
 "use server";
 
 import User from "@/models/User";
+import connectDB from "../connectDB";
 
 export async function createUser(user: any) {
   try {
+    await connectDB();
     const newUser = new User(user);
     await newUser.save();
     return JSON.parse(JSON.stringify(newUser));
