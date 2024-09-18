@@ -61,12 +61,12 @@ export async function POST(req: Request) {
 
   try {
     if (eventType === "user.created") {
-      const { id, email_addresses } = evt.data;
+      const { id, email_addresses, username } = evt.data;
 
       const clerkUser = {
         clerkId: id,
         email: email_addresses[0].email_address,
-        //   username: username,
+        username: username,
         //   firstName: first_name,
         //   lastName: last_name,
         //   avatar: image_url,
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
         email: clerkUser.email,
         //   firstName: clerkUser.firstName,
         //   lastName: clerkUser.lastName,
-        //   username: clerkUser.username,
+        username: clerkUser.username,
         //   avatar: clerkUser.avatar,
       };
       // Create the user in MongoDB using the createUser serverless function
