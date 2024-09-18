@@ -72,8 +72,16 @@ export async function POST(req: Request) {
 
     console.log("Creating user in MongoDB:", clerkUser);
 
+    const user = {
+      clerkId: clerkUser.clerkId,
+      email: clerkUser.email,
+      firstName: clerkUser.firstName,
+      lastName: clerkUser.lastName,
+      username: clerkUser.username,
+      avatar: clerkUser.avatar,
+    };
     // Create the user in MongoDB using the createUser serverless function
-    const newUser = await createUser(clerkUser);
+    const newUser = await createUser(user);
 
     if (newUser) {
       await clerkClient.users.updateUserMetadata(id, {
