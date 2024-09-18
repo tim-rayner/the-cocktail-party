@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 import { createUser } from "@/app/lib/actions/user.action";
+import User from "@/models/User";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
@@ -72,8 +73,6 @@ export async function POST(req: Request) {
         //   avatar: image_url,
       };
 
-      console.log("Creating user in MongoDB:", clerkUser);
-
       const user = {
         clerkId: clerkUser.clerkId,
         email: clerkUser.email,
@@ -82,6 +81,18 @@ export async function POST(req: Request) {
         username: clerkUser.username,
         //   avatar: clerkUser.avatar,
       };
+
+      //make check if user already exists in mongodb with email address
+
+      const existingUser = await User.findOne({ email: user.email });
+
+      if (existingUser) {
+        return NextResponse.json({
+          message: "User already exists",
+          user: existingUser,
+        });
+      }
+
       // Create the user in MongoDB using the createUser serverless function
       const newUser = await createUser(user);
 
@@ -106,5 +117,5 @@ export async function POST(req: Request) {
     });
   }
 
-  return new Response("Webhook received", { status: 200 });
+  return new Response("Accept", { status: 202 });
 }

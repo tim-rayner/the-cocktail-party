@@ -9,6 +9,14 @@ const Competitor = new mongoose.Schema(
     standing: Number,
     averageScore: Number,
     isHost: Boolean,
+    cocktail: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Cocktail",
+    },
+    party: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Party",
+    },
   },
   {
     timestamps: true,
