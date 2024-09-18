@@ -1,15 +1,18 @@
 import mongoose from "mongoose";
 
+const MONGO_URI = process.env.MONGODB_URI!;
+
 const connectDB = async () => {
+  if (mongoose.connections && mongoose.connections[0].readyState) {
+    return true;
+  }
+
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI!);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    await mongoose.connect(MONGO_URI);
+    console.log("Mongodb connected");
+    return true;
   } catch (error) {
-    if (error instanceof mongoose.Error) {
-      console.error(`Mongoose Error: ${error.message}`);
-    } else {
-      console.error(`Error: ${error}`);
-    }
+    console.log(error);
   }
 };
 

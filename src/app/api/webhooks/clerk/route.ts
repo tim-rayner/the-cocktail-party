@@ -1,8 +1,10 @@
+/**
+ * @retire - This file is not used in the project. It is a sample file to show how to create a webhook route in the project.
+ */
 import { clerkClient, WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
-
 import { createUser } from "@/app/lib/actions/user.action";
 
 export async function POST(req: Request) {
@@ -52,8 +54,7 @@ export async function POST(req: Request) {
   }
 
   // Do something with the payload
-  // For this guide, you simply log the payload to the console
-  const { id } = evt.data;
+
   const eventType = evt.type;
 
   //CREAE user in mongodb
