@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     });
   } catch (err) {
     console.error("Error fetching users:", err);
-    return new Response(JSON.stringify({ message: err.message }), {
+    return new Response(JSON.stringify({ message: (err as Error).message }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     });
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     );
   } catch (err) {
     console.error("Error saving user:", err);
-    return new Response(JSON.stringify({ message: err.message }), {
+    return new Response(JSON.stringify({ message: (err as Error).message }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     });
