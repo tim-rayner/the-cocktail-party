@@ -86,7 +86,7 @@ export async function POST(req: Request) {
 
       const existingUser = await User.findOne({ email: user.email });
 
-      if (existingUser || user.username === null) {
+      if (existingUser) {
         return NextResponse.json({
           message: "User already exists",
           user: existingUser,

@@ -1,22 +1,26 @@
 // import type { UserResource } from "@clerk/nextjs";
 
+import mongoose from "mongoose";
+import { Cocktail } from "./cocktailTypes";
+
 // export interface User extends UserResource {}
 
 export interface User {
-  _id: string;
+  _id?: mongoose.Schema.Types.ObjectId;
   clerkId: string;
   email: string;
   firstName: string;
   lastName: string;
   username: string;
   avatar: string;
+  //timestamps: true
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface Competitor {
   user: User;
-  standing: number;
   averageScore: number;
   isHost: boolean;
+  cocktail?: Cocktail;
 }

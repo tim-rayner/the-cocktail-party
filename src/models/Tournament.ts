@@ -1,16 +1,9 @@
 import mongoose from "mongoose";
+import { Competitor } from "@/types/userTypes";
 
 const Tournament = new mongoose.Schema(
   {
-    competitors: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Competitor",
-        },
-      ],
-      default: [],
-    },
+    competitors: [] as Competitor[],
     name: String,
     rounds: {
       type: [

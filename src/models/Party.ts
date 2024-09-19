@@ -1,21 +1,30 @@
 import mongoose from "mongoose";
 
-const Party = new mongoose.Schema(
+type Competitor = {
+  clerkUserId: string;
+  averageScore: number;
+  isHost: boolean;
+};
+
+const PartySchema = new mongoose.Schema(
   {
-    host: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    hostClerkId: String,
     name: String,
     description: String,
     theme: String,
     startDate: Date,
     endDate: Date,
     active: Boolean,
+    code: String,
+    competitors: {
+      type: [Object] as unknown as Competitor[],
+      default: [],
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.models.Party || mongoose.model("Party", Party);
+export default mongoose.models?.CocktailParty ||
+  mongoose.model("CocktailParty", PartySchema);

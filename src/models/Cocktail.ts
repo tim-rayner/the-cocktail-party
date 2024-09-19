@@ -7,10 +7,7 @@ const Cocktail = new mongoose.Schema(
     theme: String,
     ingredients: [String],
     instructions: String,
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    ownerClerkId: String,
   },
   {
     timestamps: true,
