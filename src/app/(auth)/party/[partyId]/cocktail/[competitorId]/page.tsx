@@ -3,13 +3,15 @@
 import { NextPage } from "next";
 
 interface Props {
-  params: { cocktailId: string };
+  params: { competitorId: string };
 }
 
 const CocktailVotingPage: NextPage<Props> = ({ params }) => {
+  console.log("CocktailVotingPage", params);
+
   return (
     <div>
-      <h1> Cocktail {params.cocktailId} screen </h1>
+      <h1> Cocktail created for {params.competitorId} </h1>
     </div>
   );
 };

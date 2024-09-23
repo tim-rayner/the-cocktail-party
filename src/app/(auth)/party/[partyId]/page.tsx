@@ -9,22 +9,33 @@ import { useEffect, useState } from "react";
 import { Party as iParty } from "@/types/partyTypes";
 import { Competitor } from "@/types/userTypes";
 
+import CreateCocktailForm from "@/components/organisms/CreateCocktailForm";
+import { useUser } from "@clerk/nextjs";
+import { Cocktail, CocktailVote } from "@/types/cocktailTypes";
+import { createCocktail } from "@/app/lib/actions/createCocktail.action";
+
 interface Props {
   params: { partyId: string };
 }
 
 const PartyHomePage: NextPage<Props> = ({ params }) => {
   const router = useRouter();
+  const { user } = useUser();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [partyData, setPartyData] = useState<iParty>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
+  const [currentCompetitor, setCurrentCompetitor] = useState<Competitor>();
 
   useEffect(() => {
     async function fetchPartyData() {
       try {
         const data = await getParty(params.partyId);
+
+        setCurrentCompetitor(
+          data.competitors.find((c) => c.user.clerkId === user?.id)
+        );
         setPartyData(data);
       } catch (err) {
         setError(err);
@@ -34,7 +45,7 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
     }
 
     fetchPartyData();
-  }, [params.partyId]);
+  }, [params.partyId, user]);
 
   function handleModalOpen() {
     setModalOpen(true);
@@ -44,17 +55,44 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
     setModalOpen(false);
   }
 
-  function handleLeaderboardClick() {
-    console.log("Leaderboard clicked");
-  }
-
-  function handleEntrantClick() {
-    console.log("Entrant clicked");
-  }
-
   function handleCocktailClick() {
     console.log("Cocktail clicked");
     router.push(`/party/${params.partyId}/cocktail/${"abc321"}`);
+  }
+
+  async function handleCreateCocktail(cocktail: Cocktail) {
+    //
+    console.log("Creating cocktail", cocktail);
+    try {
+      if (!currentCompetitor) {
+        throw new Error("Current competitor not found");
+      }
+
+      const updatedCompetitor = { ...currentCompetitor };
+
+      updatedCompetitor.cocktail = cocktail;
+
+      const newCocktail: CocktailVote = await createCocktail(
+        updatedCompetitor,
+        params.partyId
+      );
+
+      console.log("Cocktail created", newCocktail);
+
+      if (newCocktail) {
+        setModalOpen(false);
+        router.push(
+          `/party/${params.partyId}/cocktail/${newCocktail.ownerClerkId}`
+        );
+      }
+    } catch (err) {
+      console.error("Error creating cocktail:", err);
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      } else {
+        throw new Error("An unknown error occurred");
+      }
+    }
   }
 
   if (loading) {
@@ -77,6 +115,7 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
       <p>Start Date: {partyData.startDate.toString()}</p>
       <p>End Date: {partyData.endDate.toString()}</p>
 
+      <p> Current Competitor: {currentCompetitor?.user.username}</p>
       <div className="flex flex-col space-y-4 w-3/4 mx-auto">
         <BrandButton label="Register Cocktail" onPress={handleModalOpen} />
       </div>
@@ -102,10 +141,16 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
         ))}
       </div>
 
-      <Modal isOpen={modalOpen} onClose={handleModalClose}>
-        <h1>Register Cocktail</h1>
-        <p>Form goes here</p>
-      </Modal>
+      {currentCompetitor && (
+        <Modal isOpen={modalOpen} onClose={handleModalClose}>
+          <CreateCocktailForm
+            currentCompetitor={currentCompetitor}
+            onCompleted={(e) => {
+              handleCreateCocktail(e);
+            }}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

@@ -1,13 +1,11 @@
 import mongoose from "mongoose";
 
+//retired - the cocktail is now linked to the party
 const Cocktail = new mongoose.Schema(
   {
-    name: String,
-    description: String,
-    theme: String,
-    ingredients: [String],
-    instructions: String,
     ownerClerkId: String,
+    partyId: mongoose.Schema.Types.ObjectId,
+    name: String,
   },
   {
     timestamps: true,

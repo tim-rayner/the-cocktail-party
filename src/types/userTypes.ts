@@ -23,4 +23,5 @@ export interface Competitor {
   averageScore: number;
   isHost: boolean;
   cocktail?: Cocktail;
+  partyId?: mongoose.Schema.Types.ObjectId;
 }

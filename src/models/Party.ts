@@ -1,9 +1,11 @@
+import { Cocktail } from "@/types/cocktailTypes";
 import mongoose from "mongoose";
 
 type Competitor = {
   clerkUserId: string;
   averageScore: number;
   isHost: boolean;
+  cocktail: Cocktail;
 };
 
 const PartySchema = new mongoose.Schema(
