@@ -31,7 +31,7 @@ export async function startParty(partyData: NewParty) {
     //create a competitor object for the host user
     const hostCompetitor: Competitor = {
       user: hostUser,
-      averageScore: 0,
+
       isHost: true,
     };
 
