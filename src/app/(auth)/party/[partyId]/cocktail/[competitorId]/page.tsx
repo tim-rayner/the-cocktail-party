@@ -3,7 +3,7 @@
 import { NextPage } from "next";
 
 interface Props {
-  params: { competitorId: string };
+  params: { competitorId: string; partyId: string };
 }
 
 const CocktailVotingPage: NextPage<Props> = ({ params }) => {
@@ -11,7 +11,10 @@ const CocktailVotingPage: NextPage<Props> = ({ params }) => {
 
   return (
     <div>
-      <h1> Cocktail created for {params.competitorId} </h1>
+      <h1>
+        {" "}
+        Cocktail created for {params.competitorId} for party {params.partyId}
+      </h1>
     </div>
   );
 };

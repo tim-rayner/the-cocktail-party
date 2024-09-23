@@ -21,7 +21,6 @@ interface Props {
 const PartyHomePage: NextPage<Props> = ({ params }) => {
   const router = useRouter();
   const { user } = useUser();
-
   const [modalOpen, setModalOpen] = useState(false);
   const [partyData, setPartyData] = useState<iParty>();
   const [loading, setLoading] = useState(true);
@@ -34,7 +33,7 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
         const data = await getParty(params.partyId);
 
         setCurrentCompetitor(
-          data.competitors.find((c) => c.user.clerkId === user?.id)
+          data.competitors.find((c: Competitor) => c.user.clerkId === user?.id)
         );
         setPartyData(data);
       } catch (err) {
@@ -55,9 +54,9 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
     setModalOpen(false);
   }
 
-  function handleCocktailClick() {
+  function handleCocktailClick(ownerId: string) {
     console.log("Cocktail clicked");
-    router.push(`/party/${params.partyId}/cocktail/${"abc321"}`);
+    router.push(`/party/${params.partyId}/cocktail/${ownerId}`);
   }
 
   async function handleCreateCocktail(cocktail: Cocktail) {
@@ -124,16 +123,14 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
       </div>
 
       {/* list of entrants where you're able to click through to vote  */}
-      <div
-        className="table-container w-3/4 mx-auto text-center"
-        onClick={handleCocktailClick}
-      >
+      <div className="table-container w-3/4 mx-auto text-center">
         [entrants goes here]
         <p> {partyData.competitors?.length} entrants</p>
         {partyData.competitors?.map((entrant: Competitor) => (
           <div
             key={entrant.user._id?.toString()}
             className="flex justify-between"
+            onClick={() => handleCocktailClick(entrant.user.clerkId)}
           >
             <p>{entrant.user.username}</p>
             <p>{entrant.cocktail?.name}</p>
