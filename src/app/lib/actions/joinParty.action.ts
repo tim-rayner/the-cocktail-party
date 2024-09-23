@@ -36,7 +36,6 @@ export async function joinParty(partyCode: string, clerkId: string) {
     //step 3: create the user a competitor class
     const competitor: Competitor = {
       user: activeUser,
-      averageScore: 0,
       isHost: false,
     };
 
