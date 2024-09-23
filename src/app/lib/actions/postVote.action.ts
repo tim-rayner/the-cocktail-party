@@ -1,3 +1,5 @@
+"use server";
+
 import { Competitor } from "@/types/userTypes";
 import connectDB from "../connectDB";
 import Party from "@/models/Party";
@@ -5,6 +7,8 @@ import { CocktailVote } from "@/types/cocktailTypes";
 
 export async function postVote(vote: CocktailVote) {
   try {
+    console.log("vote: ", vote);
+
     await connectDB();
 
     // Step 1 - find the party by the party Id as long as the party is active
@@ -53,6 +57,9 @@ export async function postVote(vote: CocktailVote) {
 
     // Mark the competitors path as modified
     party.markModified("competitors");
+
+    //Mark the cocktail path as modified
+    party.markModified("cocktail");
 
     // Save the party document
     await party.save();

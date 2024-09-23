@@ -20,8 +20,8 @@ export interface User {
 
 export interface Competitor {
   user: User;
-  averageScore: number;
   isHost: boolean;
   cocktail?: Cocktail;
   partyId?: mongoose.Schema.Types.ObjectId;
+  score?: number;
 }

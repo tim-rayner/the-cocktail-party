@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export type CocktailVote = {
   ownerClerkId: string; //???
-  partyId: mongoose.Schema.Types.ObjectId;
+  partyId: mongoose.Schema.Types.ObjectId | string;
   voterClerkId: string;
   voterUsername: string; //added for convenience
   breakdown: {
@@ -16,6 +16,7 @@ export type CocktailVote = {
 
 export interface Cocktail {
   ownerClerkId: string;
+  ownerName?: string;
   partyId: mongoose.Schema.Types.ObjectId;
   name: string;
   description: string;

@@ -13,6 +13,7 @@ import CreateCocktailForm from "@/components/organisms/CreateCocktailForm";
 import { useUser } from "@clerk/nextjs";
 import { Cocktail, CocktailVote } from "@/types/cocktailTypes";
 import { createCocktail } from "@/app/lib/actions/createCocktail.action";
+import CompetitorStanding from "@/components/molecules/CompetitorStanding";
 
 interface Props {
   params: { partyId: string };
@@ -115,26 +116,23 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
       <p>End Date: {partyData.endDate.toString()}</p>
 
       <p> Current Competitor: {currentCompetitor?.user.username}</p>
-      <div className="flex flex-col space-y-4 w-3/4 mx-auto">
-        <BrandButton label="Register Cocktail" onPress={handleModalOpen} />
-      </div>
-      <div className="flex flex-col space-y-4 w-3/4 mx-auto my-3">
-        <BrandButton label="Leaderboard" onPress={handleModalOpen} />
-      </div>
+
+      {currentCompetitor && currentCompetitor.cocktail == undefined && (
+        <div className="flex flex-col space-y-4 w-3/4 mx-auto">
+          <BrandButton label="Register Cocktail" onPress={handleModalOpen} />
+        </div>
+      )}
 
       {/* list of entrants where you're able to click through to vote  */}
-      <div className="table-container w-3/4 mx-auto text-center">
-        [entrants goes here]
+      <div className="table-container w-3/4 mx-auto text-center py-6">
         <p> {partyData.competitors?.length} entrants</p>
-        {partyData.competitors?.map((entrant: Competitor) => (
-          <div
-            key={entrant.user._id?.toString()}
-            className="flex justify-between"
-            onClick={() => handleCocktailClick(entrant.user.clerkId)}
-          >
-            <p>{entrant.user.username}</p>
-            <p>{entrant.cocktail?.name}</p>
-          </div>
+        {partyData.competitors?.map((entrant: Competitor, index: number) => (
+          <CompetitorStanding
+            competitor={entrant}
+            position={index + 1}
+            score={1}
+            key={entrant.user.clerkId}
+          />
         ))}
       </div>
 

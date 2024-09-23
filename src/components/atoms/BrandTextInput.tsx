@@ -2,7 +2,7 @@ type BrandTextInputProps = {
   label: string;
   value: string;
   placeholder?: string;
-  type?: "text" | "password";
+  type?: "text" | "password" | "number";
   onChange: (value: string) => void;
 };
 

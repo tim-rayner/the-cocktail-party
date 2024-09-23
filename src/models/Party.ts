@@ -1,13 +1,6 @@
 import { Cocktail } from "@/types/cocktailTypes";
 import mongoose from "mongoose";
 
-type Competitor = {
-  clerkUserId: string;
-  averageScore: number;
-  isHost: boolean;
-  cocktail: Cocktail;
-};
-
 const PartySchema = new mongoose.Schema(
   {
     hostClerkId: String,
@@ -18,10 +11,10 @@ const PartySchema = new mongoose.Schema(
     endDate: Date,
     active: Boolean,
     code: String,
-    competitors: {
-      type: [Object] as unknown as Competitor[],
-      default: [],
-    },
+    // competitors: {
+    //   type: [Object] as unknown as Competitor[],
+    //   default: [],
+    // },
   },
   {
     timestamps: true,
