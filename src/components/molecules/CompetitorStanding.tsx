@@ -4,16 +4,22 @@ type CompetitorStandingProps = {
   competitor: Competitor;
   score: number;
   position: number;
+  onClicked?: () => void;
 };
 
 const CompetitorStanding = ({
   competitor,
   position,
+  score,
+  onClicked,
 }: CompetitorStandingProps) => {
   //curate total score by combining all the scores in the breakdown object
 
   return (
-    <div className="flex items-center justify-between py-2 border-b border-gray-300">
+    <div
+      className="flex items-center justify-between py-2 border-b border-gray-300"
+      onClick={onClicked}
+    >
       <div className="flex items-center">
         <p className="font-bold text-lg">{position}</p>
         {/* <img

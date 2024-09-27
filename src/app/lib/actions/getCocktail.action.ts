@@ -6,41 +6,44 @@ import { Competitor } from "@/types/userTypes";
 
 export async function getCocktail(partyId: string, competitorId: string) {
   try {
-    console.log("partyId: ", partyId);
     await connectDB();
 
-    // Step 1 - find the party by the partyId
-    const party = await Party.findOne({
-      _id: partyId,
-    });
+    // Step 1 - find the party by the party Id and populate competitors
+    const party = await Party.findById(partyId);
 
-    // if the party is not found, throw an error
+    // Log the party object to see its contents
+    console.log("Party object:", party);
+
     if (!party) {
       throw new Error("Party not found");
     }
 
     const competitors = party.competitors;
 
-    // Step 2 - find the competitor by the ownerClerkId
+    // Log the competitors array to see its contents
+    console.log("Party competitors:", party.competitors);
+
+    // Use a more specific check for null or undefined
+    if (competitors === null || competitors === undefined) {
+      throw new Error("Competitors not found");
+    }
+
+    // Step 2 - find the competitor by the competitor Id
     const competitor: Competitor = competitors.find(
       (competitor: Competitor) => competitor.user.clerkId === competitorId
     );
 
-    // if the competitor is not found, throw an error
     if (!competitor) {
       throw new Error("Competitor not found");
     }
 
-    //if the competitor does not have a cocktail, return an empty object
-    if (!competitor.cocktail) {
-      return {};
+    if (competitor.cocktail) {
+      competitor.cocktail.ownerName = competitor.user.username;
     }
 
-    competitor.cocktail.ownerName = competitor.user.username;
-
-    return JSON.parse(JSON.stringify(competitor?.cocktail));
+    return competitor.cocktail;
   } catch (err) {
-    console.error("Error getting party:", err);
+    console.error("Error fetching cocktail:", err);
     if (err instanceof Error) {
       throw new Error(err.message);
     } else {

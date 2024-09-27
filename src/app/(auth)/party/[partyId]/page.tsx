@@ -132,6 +132,7 @@ const PartyHomePage: NextPage<Props> = ({ params }) => {
             position={index + 1}
             score={1}
             key={entrant.user.clerkId}
+            onClicked={() => handleCocktailClick(entrant.user.clerkId)}
           />
         ))}
       </div>

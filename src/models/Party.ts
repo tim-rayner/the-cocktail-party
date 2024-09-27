@@ -1,4 +1,4 @@
-import { Cocktail } from "@/types/cocktailTypes";
+import { Competitor } from "@/types/userTypes";
 import mongoose from "mongoose";
 
 const PartySchema = new mongoose.Schema(
@@ -11,15 +11,14 @@ const PartySchema = new mongoose.Schema(
     endDate: Date,
     active: Boolean,
     code: String,
-    // competitors: {
-    //   type: [Object] as unknown as Competitor[],
-    //   default: [],
-    // },
+    competitors: {
+      type: [Object] as unknown as Competitor[],
+      default: [],
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.models?.CocktailParty ||
-  mongoose.model("CocktailParty", PartySchema);
+export default mongoose.models?.Party || mongoose.model("Party", PartySchema);
